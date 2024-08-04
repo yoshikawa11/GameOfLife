@@ -4,8 +4,7 @@ import game.GameOfLife;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        GameOfLife gameOfLife = new GameOfLife(5, 2);
+        GameOfLife gameOfLife = new GameOfLife(10, 3);
         gameOfLife.run();
     }
-
 }

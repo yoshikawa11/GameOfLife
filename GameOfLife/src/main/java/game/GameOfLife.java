@@ -6,7 +6,7 @@ public class GameOfLife {
     private int size;
     private final int limitedCount;
     boolean[][] currentGeneration = new boolean[size][size];
-    boolean[][] nextGeneration = currentGeneration;
+    boolean[][] nextGeneration = new boolean[size][size];
 
     public GameOfLife(int size, int limitedCount) {
         this.size = size;
@@ -46,8 +46,8 @@ public class GameOfLife {
         for (int a = 0; a < 8; a++) {
                 int indexX = x[a] + i;
                 int indexY = y[a] + j;
-                if ((indexX >= size | indexX < 0) |
-                        (indexY >= size | indexY < 0)) continue;
+                if ((indexX >= size || indexX < 0) |
+                        (indexY >= size || indexY < 0)) continue;
                 if (currentGeneration[indexX][indexY]) {
                     ++countAliveCells;
                 }
@@ -55,14 +55,14 @@ public class GameOfLife {
 
         var currentCell = currentGeneration[i][j];
         if (currentCell) {
-            return countAliveCells == 2 | countAliveCells == 3;
+            return countAliveCells == 2 || countAliveCells == 3;
         } else {
             return countAliveCells == 3;
         }
     }
 
     private void printCells() {
-        var count = 0;
+        var count = 1;
         var lines = "-----------";
         while (count <= limitedCount) {
             System.out.println(lines);
@@ -81,6 +81,8 @@ public class GameOfLife {
     }
 
     private void slideGeneration() {
+        boolean[][] temp = currentGeneration;
         currentGeneration = nextGeneration;
+        nextGeneration = temp;
     }
 }
