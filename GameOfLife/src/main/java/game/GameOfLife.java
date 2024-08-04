@@ -1,8 +1,10 @@
 package game;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 
-public class GameOfLife {
+public class GameOfLife extends JPanel {
     private int size;
     private final int limitedCount;
     boolean[][] currentGeneration = new boolean[size][size];
@@ -15,7 +17,18 @@ public class GameOfLife {
 
     public void run() {
         initialize();
-        printCells();
+
+        preparedFrame();
+
+        startSimulation();
+    }
+
+    public void preparedFrame() {
+        JFrame frame = new JFrame("Game of Life");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(size * 100, size * 100);
+        frame.add(this);
+        frame.setVisible(true);
     }
 
     private void initialize() {
@@ -61,28 +74,43 @@ public class GameOfLife {
         }
     }
 
-    private void printCells() {
-        var count = 1;
-        var lines = "-----------";
-        while (count <= limitedCount) {
-            System.out.println(lines);
-            for (var i = 0; i < size; i++) {
-                for (var j = 0; j < size; j++) {
-                    var cell = currentGeneration[i][j];
-                    System.out.print(cell ? "●": "◯");
-                    nextGeneration[i][j] = generateNextGeneration(i, j);
-                }
-                System.out.println();
-            }
-            count++;
-            slideGeneration();
-            System.out.println(lines);
-        }
-    }
-
     private void slideGeneration() {
         boolean[][] temp = currentGeneration;
         currentGeneration = nextGeneration;
         nextGeneration = temp;
+    }
+
+    private void startSimulation() {
+        int count = 0;
+        while (count < limitedCount) {
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    nextGeneration[i][j] = generateNextGeneration(i, j);
+                }
+            }
+            slideGeneration();
+            repaint();
+            count++;
+            try {
+                Thread.sleep(500); // 更新間隔を500ミリ秒に設定
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, getWidth(), getHeight());
+        g.setColor(Color.BLACK);
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (currentGeneration[i][j]) {
+                    g.fillRect(j * 10, i * 10, 10, 10);
+                }
+            }
+        }
     }
 }
