@@ -59,8 +59,8 @@ public class GameOfLife extends JPanel {
         for (int a = 0; a < 8; a++) {
                 int indexX = x[a] + i;
                 int indexY = y[a] + j;
-                if ((indexX >= size || indexX < 0) |
-                        (indexY >= size || indexY < 0)) continue;
+                if (indexX >= size || indexX < 0 ||
+                        indexY >= size || indexY < 0) continue;
                 if (currentGeneration[indexX][indexY]) {
                     ++countAliveCells;
                 }
